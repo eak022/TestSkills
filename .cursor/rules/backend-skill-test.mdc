@@ -1,0 +1,28 @@
+---
+description: โจทย์ Back-End skill test — อ่านก่อนลงมือเขียนโค้ด
+alwaysApply: true
+---
+
+# Back-End Skill Test
+
+โจทย์ที่ 1 เสร็จแล้ว อ่าน `docs/backend-skill-test.md` และวิธีเทสที่ `docs/โจทย์ที่-1/`  
+โจทย์ที่ 2 (Aniimo) เทสแล้ว อ่าน `docs/โจทย์ที่-2/README.md`  
+โจทย์ที่ 3 (Dashboard) เทสแล้ว อ่าน `docs/โจทย์ที่-3/README.md`  
+งานปัจจุบันคือโจทย์ที่ 4 อ่าน `docs/โจทย์ที่-4/README.md`
+
+โปรเจกต์นี้ต่อบนเทมเพลต Elysia เดิม **ห้ามสร้าง repo ใหม่จากศูนย์**
+
+1. Order Tracking API + state machine + เคสปัญหา 5 ข้อ
+2. Centralized bot monitor (kill-switch, heartbeat, dispatch, ≥3 เครื่อง)
+3. แนวทางบอท AOEM Midasbuy JP + Bitcash — อธิบายใน README; บอทอ้างอิง `oxide-monitor-candidate-pack/`
+
+## กติกา
+
+- PostgreSQL + Docker Compose ให้รันสั้น ๆ ได้
+- Error `{ code, message }` ให้สอดคล้อง error handler ของเทมเพลต
+- Log ต้องตามรอยด้วย `orderNo`
+- มี unit test ของ claim/idempotency/state/expire
+- ห้าม hardcode รหัสผ่าน Midasbuy ในซอร์ส; ใส่ `.env` เท่านั้น
+- โหมดบอทจริงต้อง opt-in; ค่าเริ่มต้นใช้ simulator / dry-run
+- Pack ที่อนุญาตทดสอบจริง: **99+109 Coin / 146 JPY** เท่านั้น
+- เมื่อจบแต่ละส่วน อัปเดต README: เหตุผลแก้เคส 5 ข้อ และวิธีรันทดสอบ

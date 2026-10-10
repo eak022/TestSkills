@@ -1,0 +1,76 @@
+@baseUrl = http://localhost:3000/api/v1/animo
+
+### ตรวจตัวละครของคนที่จะเติม (ค่าจากบัญชีทดสอบบนร้าน)
+POST {{baseUrl}}/verify
+Content-Type: application/json
+
+{
+  "uid": "412000837577",
+  "server": "Aniimo-Apac"
+}
+
+### รับ server เป็นรหัส serverArea ก็ได้
+POST {{baseUrl}}/verify
+Content-Type: application/json
+
+{
+  "uid": "412000837577",
+  "server": "4"
+}
+
+### UID ไม่มีในรายการตัวละคร → 400 UID_INVALID
+POST {{baseUrl}}/verify
+Content-Type: application/json
+
+{
+  "uid": "000000000000",
+  "server": "Aniimo-Apac"
+}
+
+### UID ถูกแต่เซิร์ฟเวอร์ไม่ตรง → 400 SERVER_MISMATCH
+POST {{baseUrl}}/verify
+Content-Type: application/json
+
+{
+  "uid": "412000837577",
+  "server": "Aniimo-Taiwan"
+}
+
+### รายการแพ็ก TWD ที่แกะจากร้านตอนทางออกเน็ตไต้หวัน
+GET {{baseUrl}}/packs
+
+### สรุปออเดอร์แพ็ก 300 ช่อง MyCard Points ยังไม่จ่าย
+POST {{baseUrl}}/quote
+Content-Type: application/json
+
+{
+  "uid": "412000837577",
+  "server": "Aniimo-Apac",
+  "productId": "com.x.aniimos.2.1.30"
+}
+
+### สร้างออเดอร์ Aniimo สถานะ DRAFT แล้วจด orderNo ที่ขึ้นต้น ANM-
+POST {{baseUrl}}/order
+Content-Type: application/json
+
+{
+  "uid": "412000837577",
+  "server": "Aniimo-Apac",
+  "productId": "com.x.aniimos.2.1.30"
+}
+
+### รายการออเดอร์ Aniimo ที่บันทึกไว้
+GET {{baseUrl}}/orders?page=1&limit=10
+
+### เปิดใบที่สร้างจากขั้นก่อน เปลี่ยนเลขให้ตรง orderNo ที่ได้
+GET {{baseUrl}}/orders/ANM-0000000000001
+
+### แพ็กที่ไม่มีในชุดที่แกะได้ → 400 PACK_NOT_FOUND
+POST {{baseUrl}}/quote
+Content-Type: application/json
+
+{
+  "uid": "412000837577",
+  "server": "4",
+  "productId": "com.x.aniimos.unknown"
+}

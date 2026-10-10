@@ -1,0 +1,84 @@
+enum BotAgentStatus {
+  online
+  offline
+  starting
+  stopping
+  error
+}
+
+enum BotWorkState {
+  standby
+  in_progress
+  stopped
+}
+
+enum BotCommandType {
+  start
+  stop
+  restart
+  status
+  update
+}
+
+enum BotCommandRunStatus {
+  queued
+  running
+  success
+  failed
+}
+
+model BotAgent {
+  id            String         @id
+  name          String
+  deviceName    String
+  status        BotAgentStatus @default(offline)
+  workState     BotWorkState   @default(stopped)
+  cpuPercent    Decimal        @default(0)
+  memoryPercent Decimal        @default(0)
+  uptimeSeconds BigInt         @default(0)
+  lastHeartbeat DateTime?
+  codeVersion   String?
+  apiKeyHash    String?        @unique
+  lastJobResult String?
+  commands      BotCommand[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@map("botAgent")
+}
+
+model BotCommand {
+  id          Int                 @id @default(autoincrement())
+  bot         BotAgent            @relation(fields: [botId], references: [id])
+  botId       String
+  command     BotCommandType
+  requestedBy String
+  status      BotCommandRunStatus @default(queued)
+  result      Json?
+  createdAt   DateTime            @default(now())
+  completedAt DateTime?
+
+  @@index([botId, createdAt])
+  @@map("botCommand")
+}
+
+model AuditLog {
+  id         Int      @id @default(autoincrement())
+  actor      String
+  action     String
+  targetType String
+  targetId   String?
+  metadata   Json?
+  createdAt  DateTime @default(now())
+
+  @@index([createdAt])
+  @@map("auditLog")
+}
+
+model SystemSetting {
+  key       String   @id
+  value     Json
+  updatedAt DateTime @updatedAt
+
+  @@map("systemSetting")
+}

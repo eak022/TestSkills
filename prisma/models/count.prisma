@@ -1,0 +1,12 @@
+model Count {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+  name      String
+  count     Int
+  prefix    String?
+  alphabet  String?
+
+  @@map("count")
+}

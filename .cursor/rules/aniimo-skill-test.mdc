@@ -1,0 +1,16 @@
+---
+description: โจทย์ที่ 2 Aniimo UID top-up — อ่านก่อนลงมือส่วนนี้
+alwaysApply: true
+---
+
+# โจทย์ที่ 2 — Aniimo Webshop
+
+ก่อนลงมือส่วน Aniimo ให้อ่าน `docs/โจทย์ที่-2/README.md` เป็นแหล่งความจริง
+
+ต่อบนเทมเพลต Elysia เดิม ห้ามสร้าง repo ใหม่ โจทย์ที่ 1 อยู่ที่ `docs/โจทย์ที่-1/` โจทย์ที่ 2 เทสแล้ว งานปัจจุบันอยู่ที่ `docs/โจทย์ที่-3/`
+
+- Region Taiwan, สกุลเงิน TWD, จ่ายผ่าน Mycard เท่านั้น
+- เปลี่ยนการเติมจาก Via Login เป็น UID โดยไม่ใช้รหัสผ่านผู้เล่น
+- endpoint ที่ต้องมี: `POST /api/v1/animo/verify` รับ `uid` กับ `server` แล้วคืนข้อมูลตัวละคร
+- มีบันทึก Network จากร้านแล้ว เส้นตรวจตัวละครของคนที่จะเติมคือ `GET /api/player/roles` แล้วจับคู่ `roleId` กับ `serverAreaName` ห้ามเดาเส้นที่ยังไม่เห็น
+- ห้ามใส่ OTP, cookie, token ลงซอร์ส ห้ามจ่ายเงินจริง ห้าม bypass CAPTCHA หรือ rate limit

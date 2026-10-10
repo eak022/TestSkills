@@ -1,0 +1,4 @@
+const ACCESS_TOKEN_EXP = '30d'
+const REFRESH_TOKEN_EXP = '7d'
+const JWT_NAME = 'jwt'
+export { ACCESS_TOKEN_EXP, REFRESH_TOKEN_EXP, JWT_NAME }

@@ -1,0 +1,27 @@
+model TopUp {
+  id        Int         @id @default(autoincrement())
+  playerId  String
+  amount    Decimal
+  status    TopUpStatus
+  server    GameServer  @relation(fields: [serverId], references: [id])
+  serverId  Int
+  user      User        @relation(fields: [userId], references: [id])
+  userId    Int
+  package   Package     @relation(fields: [packageId], references: [id])
+  packageId Int
+  game      Game        @relation(fields: [gameId], references: [id])
+  gameId    Int
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  deletedAt DateTime?
+  createdBy Json?
+  updatedBy Json?
+
+  @@map("topUp")
+}
+
+enum TopUpStatus {
+  Pending
+  Success
+  Failed
+}

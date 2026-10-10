@@ -1,0 +1,155 @@
+@baseUrl = http://localhost:3000/api/v1/orders
+@Idempotency-Key = demo-create-order-001
+@orderNo = ORD-0000000000001
+# ลูกค้า: token จาก POST /api/v1/auth/login
+@customerToken = PASTE_CUSTOMER_ACCESS_TOKEN
+# แอดมิน: token ของบัญชี role ADMIN (bun run seed:admin)
+@adminToken = PASTE_ADMIN_ACCESS_TOKEN
+# บอท: apiKey จาก POST /api/v1/bots (แสดงครั้งเดียว)
+@botKey = PASTE_BOT_API_KEY
+
+### ===== ลูกค้า (Bearer) =====
+
+### Create order (userId มาจาก token)
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{customerToken}}
+Idempotency-Key: {{Idempotency-Key}}
+
+{
+  "playerUid": "5250140737488366145",
+  "packageId": 1,
+  "serverId": 1
+}
+
+### Replay create (same key + same body)
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{customerToken}}
+Idempotency-Key: {{Idempotency-Key}}
+
+{
+  "playerUid": "5250140737488366145",
+  "packageId": 1,
+  "serverId": 1
+}
+
+### Create without token (→ 401)
+POST {{baseUrl}}
+Content-Type: application/json
+Idempotency-Key: no-auth-001
+
+{
+  "playerUid": "5250140737488366145",
+  "packageId": 1,
+  "serverId": 1
+}
+
+### List current
+GET {{baseUrl}}?tab=current&page=1
+Authorization: Bearer {{customerToken}}
+
+### List history
+GET {{baseUrl}}?tab=history&page=1
+Authorization: Bearer {{customerToken}}
+
+### Get one (invalid format → 400)
+GET {{baseUrl}}/ORD-123
+Authorization: Bearer {{customerToken}}
+
+### Get one (ของคนอื่น → 404)
+GET {{baseUrl}}/{{orderNo}}
+Authorization: Bearer {{customerToken}}
+
+### Timeline
+GET {{baseUrl}}/{{orderNo}}/timeline
+Authorization: Bearer {{customerToken}}
+
+### Report issue
+POST {{baseUrl}}/{{orderNo}}/report-issue
+Content-Type: application/json
+Authorization: Bearer {{customerToken}}
+
+{
+  "note": "จ่ายเงินแล้วแต่เกมยังไม่เข้า"
+}
+
+### Fix UID and requeue (เจ้าของออเดอร์)
+POST {{baseUrl}}/{{orderNo}}/fix-uid
+Content-Type: application/json
+Authorization: Bearer {{customerToken}}
+
+{
+  "playerUid": "5250140737488366145"
+}
+
+### ===== ธนาคาร (HMAC) =====
+# dev ไม่ตั้ง WEBHOOK_SECRET = ข้าม signature
+# ตั้งแล้ว: x-webhook-signature = HMAC-SHA256 hex ของ raw body
+#   สร้างด้วย: printf '%s' '<body>' | openssl dgst -sha256 -hmac "$WEBHOOK_SECRET"
+
+### Payment webhook (PAID) — x-event-id สร้างเอง ใช้ค่าเดิมเพื่อเทส idempotent
+POST http://localhost:3000/api/v1/payments/webhook
+Content-Type: application/json
+x-event-id: evt-paid-001
+
+{
+  "orderNo": "{{orderNo}}",
+  "status": "PAID",
+  "providerRef": "bitcash-txn-1"
+}
+
+### Replay webhook (event เดิม)
+POST http://localhost:3000/api/v1/payments/webhook
+Content-Type: application/json
+x-event-id: evt-paid-001
+
+{
+  "orderNo": "{{orderNo}}",
+  "status": "PAID",
+  "providerRef": "bitcash-txn-1"
+}
+
+### ===== บอท (x-bot-key) — ไม่ต้องส่ง botId =====
+
+### Claim
+POST {{baseUrl}}/claim
+x-bot-key: {{botKey}}
+
+### Heartbeat
+POST {{baseUrl}}/{{orderNo}}/heartbeat
+x-bot-key: {{botKey}}
+
+### Fulfill success
+POST {{baseUrl}}/{{orderNo}}/fulfill
+Content-Type: application/json
+x-bot-key: {{botKey}}
+
+{
+  "result": "SUCCESS"
+}
+
+### Fulfill permanent fail (UID)
+POST {{baseUrl}}/{{orderNo}}/fulfill
+Content-Type: application/json
+x-bot-key: {{botKey}}
+
+{
+  "result": "FAIL",
+  "errorCode": "UID_INVALID"
+}
+
+### ===== แอดมิน (Bearer role ADMIN) =====
+
+### Refund
+POST {{baseUrl}}/{{orderNo}}/refund
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "reason": "ลูกค้าขอคืนเงิน"
+}
+
+### Run maintenance now
+POST {{baseUrl}}/maintenance/run
+Authorization: Bearer {{adminToken}}

@@ -1,0 +1,114 @@
+{
+  "tsImportSorter.configuration.autoFormat": "onSave",
+	"tsImportSorter.configuration.formatExports": true,
+	"tsImportSorter.configuration.exclude": [
+		"node_modules",
+		"eslint.config.*",
+	],
+	"tsImportSorter.configuration.sortImportsBy": "paths",
+	"tsImportSorter.configuration.groupRules": [
+		"^elysia$",
+		"^prisma$",
+		"^@prisma$",
+		"^axios$",
+		"^fs$",
+		"^path$",
+		"^@", // Other scoped imports (e.g., third-party libraries with '@' prefix)
+		"^@/plugins/", // Absolute plugins
+		"^([.]{1,2}/)+plugins/", // Relative plugins
+		"^@/stores/", // Absolute stores
+		"^([.]{1,2}/)+stores/", // Relative storesxx
+		"^@/utils/", // Absolute utilities
+		"^([.]{1,2}/)+utils/", // Relative utilities
+		"^@/enums/", // Absolute enums
+		"^([.]{1,2}/)+enums/", // Relative enums
+		"^@/models/", // Absolute models
+		"^([.]{1,2}/)+models/", // Relative models
+		"^@/components/", // Absolute components
+		"^([.]{1,2}/)+components/", // Relative components
+		"^@/pages/", // Absolute pages
+		"^([.]{1,2}/)+pages/", // Relative pages
+		"^@/assets/", // Absolute assets
+		"^([.]{1,2}/)+assets/", // Relative assets
+		"^@/resources/", // Absolute resources
+		"^([.]{1,2}/)+resources/", // Relative resources
+		"^[.]+/" // Fallback for other relative imports
+	],
+	"tsImportSorter.configuration.sortRules": {
+		"paths": ["_", "aA"], // Sort paths alphabetically
+		"names": ["_", "aA"] // Sort names alphabetically within each path
+	},
+	"tsImportSorter.configuration.maxLineLength": 160,
+	"tsImportSorter.configuration.trailingComma": "none",
+	"tsImportSorter.configuration.hasSemicolon": false,
+	"tsImportSorter.configuration.wrappingStyle": {
+		"maxBindingNamesPerLine": 0, // No limit for binding names per line
+		"maxDefaultAndBindingNamesPerLine": 2, // Maximum 2 names per line for default and binding
+		"maxExportNamesPerLine": 1, // No limit for export names per line
+		"maxNamesPerWrappedLine": 1, // No limit on wrapped lines
+		"ignoreComments": false
+	},
+	"tsImportSorter.configuration.emptyLinesBetweenGroups": 0,
+	"tsImportSorter.configuration.emptyLinesAfterAllImports": 1,
+	"tsImportSorter.configuration.keepUnused": [],
+	"tsImportSorter.configuration.removeLastSlashInPath": false,
+	"tsImportSorter.configuration.removeLastIndexInPath": false,
+	"cSpell.words": [
+		"amphoe",
+		"autofetch",
+		"bunx",
+		"chartjs",
+		"composables",
+		"Cqrs",
+		"datepicker",
+		"decamelize",
+		"ecommerce",
+		"Elysia",
+		"elysiajs",
+		"endregion",
+		"esbenp",
+		"extralight",
+		"flushall",
+		"iconify",
+		"ILIKE",
+		"kitpiboon",
+		"lessonid",
+		"liff",
+		"makewebbkk",
+		"materialdesignicons",
+		"nestjs",
+		"nuxt",
+		"nuxtjs",
+		"openai",
+		"pavinbutprom",
+		"persistedstate",
+		"pinia",
+		"postcss",
+		"qrcode",
+		"SIGNUP",
+		"skus",
+		"sonner",
+		"Strapi",
+		"Swapy",
+		"tailwindcss",
+		"tqman",
+		"typebox",
+		"typeorm",
+		"VERCEL",
+		"vetur",
+		"VITE",
+		"vitest",
+		"vuedraggable",
+		"vuejs",
+		"Vuelidate",
+		"vuepic",
+		"vuetify",
+		"vueuse",
+		"vuex",
+		"zipcode"
+	],
+	"cSpell.ignoreRegExpList": [
+		"/[\\u0E00-\\u0E7F]/g"
+	],
+	"typescript.tsdk": "node_modules/typescript/lib",
+}

@@ -1,0 +1,106 @@
+@baseUrl = http://localhost:3000/api/v1
+@adminToken = PASTE_ADMIN_ACCESS_TOKEN
+@botKey = PASTE_BOT_API_KEY
+
+### ===== แอดมิน =====
+
+### Summary
+GET {{baseUrl}}/bots/summary
+Authorization: Bearer {{adminToken}}
+
+### List bots
+GET {{baseUrl}}/bots
+Authorization: Bearer {{adminToken}}
+
+### Register bot + issue key (apiKey แสดงครั้งเดียว)
+POST {{baseUrl}}/bots
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "id": "bot-01",
+  "name": "Midasbuy Bot 01",
+  "deviceName": "PC-01"
+}
+
+### Rotate key (คีย์เก่าใช้ไม่ได้ทันที)
+POST {{baseUrl}}/bots/bot-01/api-key
+Authorization: Bearer {{adminToken}}
+
+### Revoke key
+DELETE {{baseUrl}}/bots/bot-01/api-key
+Authorization: Bearer {{adminToken}}
+
+### Command restart bot-01 (ผู้สั่งมาจาก token)
+POST {{baseUrl}}/bots/bot-01/commands
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "command": "restart"
+}
+
+### Update code all bots
+POST {{baseUrl}}/bots/update
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "version": "1.0.1"
+}
+
+### Kill-switch on
+POST {{baseUrl}}/system/kill-switch
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "enabled": true
+}
+
+### Latest code package (ยังไม่อัปโหลดได้ package: null)
+GET {{baseUrl}}/bots/packages/latest
+Authorization: Bearer {{adminToken}}
+
+### Upload zip then update all bots (เก็บไฟล์ ไม่รันบนเซิร์ฟเวอร์)
+# แนบไฟล์ .zip ของตัวเองแทนบรรทัดไฟล์ด้านล่าง ถ้าจะอัปเดตเครื่องเดียวให้เพิ่ม field botId = bot-01
+POST {{baseUrl}}/bots/packages
+Authorization: Bearer {{adminToken}}
+Content-Type: multipart/form-data; boundary=----botpack
+
+------botpack
+Content-Disposition: form-data; name="version"
+
+1.0.1
+------botpack
+Content-Disposition: form-data; name="file"; filename="bot-pack.zip"
+Content-Type: application/zip
+
+< ./bot-pack.zip
+------botpack--
+
+### Bot command logs (botId ได้จาก GET /bots)
+GET {{baseUrl}}/bots/bot-01/logs
+Authorization: Bearer {{adminToken}}
+
+### Kill-switch off
+POST {{baseUrl}}/system/kill-switch
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "enabled": false
+}
+
+### ===== บอท =====
+
+### Heartbeat from local bot (botId มาจากคีย์)
+POST {{baseUrl}}/bots/heartbeat
+Content-Type: application/json
+x-bot-key: {{botKey}}
+
+{
+  "cpuPercent": 12.5,
+  "memoryPercent": 40,
+  "uptimeSeconds": 120
+}

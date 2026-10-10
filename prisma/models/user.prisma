@@ -1,0 +1,45 @@
+enum UserRole {
+  CUSTOMER
+  ADMIN
+}
+
+model User {
+  id              Int              @id @default(autoincrement())
+  userName        String
+  password        String?
+  email           String
+  balance         Int?             @default(0)
+  userNo          String
+  phoneNumber     String?
+  point           Int?             @default(0)
+  role            UserRole         @default(CUSTOMER)
+  topUp           TopUp[]
+  orders          Order[]
+  idempotencyKeys IdempotencyKey[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  deletedAt       DateTime?
+  createdBy       Json?
+  updatedBy       Json?
+  session         Session?
+
+  @@map("user")
+}
+
+model Session {
+  id           String   @id @default(uuid())
+  userId       Int      @unique
+  refreshToken String   @unique
+  expiresAt    DateTime
+  createdAt    DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("session")
+}
+
+enum UserNamePrefixEnum {
+  MR
+  MRS
+  MS
+}

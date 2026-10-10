@@ -1,0 +1,16 @@
+---
+description: โจทย์ที่ 3 Bot Monitor Dashboard — อ่านก่อนลงมือส่วนนี้
+alwaysApply: true
+---
+
+# โจทย์ที่ 3 — Centralized Bot Monitoring Dashboard
+
+ก่อนลงมือส่วนนี้ให้อ่าน `docs/โจทย์ที่-3/README.md` เป็นแหล่งความจริง
+
+ต่อบนเทมเพลต Elysia เดิม ห้ามสร้าง repo ใหม่ โจทย์ที่ 1 และ 2 อยู่ที่ `docs/โจทย์ที่-1/` กับ `docs/โจทย์ที่-2/` และถือว่าเทสแล้ว
+
+- อย่าทำ Order Tracking หรือเคส 5 ข้อซ้ำ ของนั้นมีจากโจทย์ที่ 1
+- งานใหม่คือหน้า Dashboard, อัปเดตโค้ดด้วย zip, ช่องทาง real-time (WebSocket / MQTT / gRPC), ดู log/metrics ต่อการ์ด
+- Dashboard ล็อกด้วยแอดมิน ห้ามแยกโปรเจกต์หน้าเว็บ
+- ห้ามรัน zip ที่อัปโหลดบนเซิร์ฟเวอร์กลางโดยไม่ตรวจ
+- บอทโหมดจริงยังเป็น opt-in ค่าเริ่มต้น simulator

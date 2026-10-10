@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bot Monitor</title>
+  <link rel="stylesheet" href="/dashboard.css">
+</head>
+<body>
+  <header class="bar">
+    <strong>Bot Monitor</strong>
+    <div class="bar-tools hidden" id="barTools">
+      <span class="pill on-bar"><span class="dot"></span><span id="clock">--:--:--</span></span>
+      <button class="bar-btn" id="refresh" type="button">รีเฟรช</button>
+      <button class="bar-btn" id="logout" type="button">ออกจากระบบ</button>
+    </div>
+  </header>
+  <form class="login" id="login">
+    <h1>เข้าสู่ระบบ</h1>
+    <p class="sub">ใช้บัญชีแอดมิน</p>
+    <label for="email">อีเมล</label>
+    <input id="email" type="email" autocomplete="username" required>
+    <label for="password">รหัสผ่าน</label>
+    <input id="password" type="password" autocomplete="current-password" required>
+    <p class="error" id="loginError"></p>
+    <button class="btn green" type="submit">เข้าสู่ระบบ</button>
+  </form>
+
+  <main class="wrap hidden" id="app">
+    <p class="lead">ควบคุมเครื่องจากศูนย์กลาง ดูสถานะและสั่งการได้จากหน้านี้</p>
+
+    <section class="panel">
+      <h2>Kill-switch ทั้งระบบ</h2>
+      <p class="muted" id="killText">กำลังโหลด</p>
+      <div class="row">
+        <button class="btn ghost" id="killOff" type="button">เปิดทั้งหมด</button>
+        <button class="btn stop" id="killOn" type="button">ปิดทั้งหมด</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>อัปเดตโค้ด</h2>
+      <p class="muted" id="packageText">แพ็กเกจล่าสุด: ยังไม่ระบุเวอร์ชัน</p>
+      <div class="row">
+        <input id="version" type="text" value="1.0.1" aria-label="เวอร์ชันโค้ด">
+        <input class="file" id="zip" type="file" accept=".zip,application/zip" aria-label="เลือกไฟล์แพ็ก">
+        <button class="btn" id="pickZip" type="button">เลือกไฟล์ zip</button>
+        <button class="btn" id="updateAll" type="button">อัปเดตทุกเครื่อง</button>
+        <button class="btn ghost" id="updateSelected" type="button">อัปเดตเครื่องที่เลือก</button>
+      </div>
+      <p class="muted" id="zipNote">เลือกไฟล์ .zip แล้วกดอัปเดต เซิร์ฟเวอร์เก็บไฟล์ไว้โดยไม่รัน แล้วส่งคำสั่งไปเครื่อง</p>
+    </section>
+
+    <section class="stats" id="stats"></section>
+
+    <section class="panel">
+      <div class="row spread">
+        <h2>เครื่องทั้งหมด</h2>
+        <span class="muted">กดการ์ดเพื่อเลือก</span>
+      </div>
+      <div class="grid" id="cards"></div>
+    </section>
+  </main>
+  <div class="toast hidden" id="toast"></div>
+  <script src="/dashboard.js"></script>
+</body>
+</html>

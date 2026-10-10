@@ -1,0 +1,30 @@
+---
+description: ทุก endpoint ต้องมีตัวอย่าง body/header/params/query ใน OpenAPI เพื่อให้คนที่ไม่รู้เทสได้
+alwaysApply: true
+---
+
+# OpenAPI: ใส่ตัวอย่างทุกครั้งที่เพิ่ม/แก้ endpoint
+
+เมื่อสร้างหรือแก้ endpoint ต้องทำให้คนที่ไม่เคยเห็นโค้ดเปิด `/openapi` แล้วเทสได้ทันที
+
+## ต้องมี
+
+- **ทุก field ที่ผู้เรียกกรอก** (body, headers, params, query) ใส่ `example` ที่ใช้ได้จริง — ใช้ `example` (เอกพจน์) ให้เหมือนทั้งโปรเจกต์ ไม่ใช้ `examples`
+- field ที่ค่า **มาจาก endpoint อื่น** (id, orderNo, token, key) ใส่ `description` บอกที่มา เช่น `ได้จาก GET /game/{id} → servers[].id`
+- field ที่ค่าถูกจำกัด (enum / รูปแบบ) บอกค่าที่ใช้ได้ใน `description` เช่น `ACTIVE | InActive`, `ORD-` + ตัวเลข 13 หลัก
+- header ที่ client สร้างเอง (เช่น `idempotency-key`, `x-event-id`) บอกว่า **สร้างเอง** และถ้าซ้ำจะเกิดอะไร
+- ค่าตัวอย่างต้อง **สอดคล้องกันทั้งระบบ**: gameId/packageId/serverId = 1, `ORD-0000000000001`, UID `5250140737488366145`, server `Empire#239`, pack `99+109 Coin` / 208 coin / 146 JPY (pack เดียวที่อนุญาตให้ทดสอบจริง), อีเมล `dragonKnight1140@gmail.com`, รหัสผ่าน `P@ssw0rd`, bot `bot-01`
+- ห้ามใส่ความลับจริงเป็นตัวอย่าง (รหัสผ่าน Midasbuy, `WEBHOOK_SECRET`, bot key จริง)
+
+## ชนิดผู้เรียกและ security
+
+- endpoint ที่ต้อง login ใส่ `auth: true` / `adminAuth: true` **และ** `detail.security: BEARER_SECURITY`
+- endpoint ของบอทใส่ `botAuth: true` และ `detail.security: BOT_KEY_SECURITY`
+- (`src/libs/docs/security.ts`) — webhook ไม่ใช้ security scheme ให้อธิบาย header `x-webhook-signature` ใน `detail.description`
+- `detail.description` ระบุว่าใครเรียกได้ (ลูกค้า / แอดมิน / บอท / ธนาคาร) และเงื่อนไข state
+
+## เอกสารที่ต้องอัปเดตคู่กัน
+
+- เพิ่มขั้นตอนใน `src/libs/docs/openapi-test-guide.ts` ถ้าเป็นขั้นที่ต้องทำก่อน/หลัง endpoint อื่น
+- เพิ่มคำขอตัวอย่างใน `http/*.http` (ใส่ header/body ครบเหมือน OpenAPI)
+- model ใหม่ใส่ตัวอย่างในไฟล์ `*.model.ts` ไม่ใส่ที่ controller

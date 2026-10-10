@@ -1,0 +1,116 @@
+enum OrderStatus {
+  PENDING_PAYMENT
+  QUEUED
+  IN_PROGRESS
+  COMPLETED
+  DELAYED
+  FAILED
+  EXPIRED
+  REFUNDED
+}
+
+enum OrderFailureKind {
+  TRANSIENT
+  PERMANENT
+}
+
+model Order {
+  id              Int               @id @default(autoincrement())
+  orderNo         String            @unique
+  status          OrderStatus       @default(PENDING_PAYMENT)
+  version         Int               @default(0)
+  playerUid       String
+  retryCount      Int               @default(0)
+  claimedBy       String?
+  claimedAt       DateTime?
+  leaseExpiresAt  DateTime?
+  lastHeartbeatAt DateTime?
+  expiresAt       DateTime
+  failureKind     OrderFailureKind?
+  failureReason   String?
+  issueNote       String?
+  amount          Decimal
+  user            User              @relation(fields: [userId], references: [id])
+  userId          Int
+  package         Package           @relation(fields: [packageId], references: [id])
+  packageId       Int
+  game            Game              @relation(fields: [gameId], references: [id])
+  gameId          Int
+  server          GameServer        @relation(fields: [serverId], references: [id])
+  serverId        Int
+  timeline        OrderTimeline[]
+  paymentAttempt  PaymentAttempt?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  deletedAt       DateTime?
+  createdBy       Json?
+  updatedBy       Json?
+
+  @@index([status, createdAt])
+  @@index([userId, createdAt])
+  @@map("order")
+}
+
+model OrderTimeline {
+  id         Int          @id @default(autoincrement())
+  order      Order        @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId    Int
+  fromStatus OrderStatus?
+  toStatus   OrderStatus
+  reason     String?
+  createdAt  DateTime     @default(now())
+
+  @@index([orderId, createdAt])
+  @@map("orderTimeline")
+}
+
+enum PaymentAttemptStatus {
+  INITIATED
+  SUCCEEDED
+  FAILED
+}
+
+model PaymentAttempt {
+  id          Int                  @id @default(autoincrement())
+  order       Order                @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId     Int                  @unique
+  status      PaymentAttemptStatus @default(INITIATED)
+  providerRef String?              @unique
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
+
+  @@map("paymentAttempt")
+}
+
+model WebhookEvent {
+  eventId     String   @id
+  orderNo     String?
+  outcome     String
+  processedAt DateTime @default(now())
+
+  @@map("webhookEvent")
+}
+
+model SystemAlert {
+  id        Int      @id @default(autoincrement())
+  type      String
+  orderNo   String?
+  message   String
+  createdAt DateTime @default(now())
+
+  @@unique([type, orderNo])
+  @@map("systemAlert")
+}
+
+// key ผูกกับผู้ใช้ — คนละ user ใช้ key เดียวกันได้โดยไม่ชนกัน และดูออเดอร์ของกันไม่ได้
+model IdempotencyKey {
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      Int
+  key         String
+  requestHash String
+  orderNo     String
+  createdAt   DateTime @default(now())
+
+  @@id([userId, key])
+  @@map("idempotencyKey")
+}

@@ -1,0 +1,39 @@
+enum AniimoOrderStatus {
+  DRAFT
+}
+
+model AniimoOrder {
+  id                     Int               @id @default(autoincrement())
+  orderNo                String            @unique
+  status                 AniimoOrderStatus @default(DRAFT)
+  submitted              Boolean           @default(false)
+  uid                    String
+  characterName          String
+  server                 String
+  serverId               Int
+  level                  String
+  country                String
+  regionName             String
+  productId              String
+  productName            String
+  packageId              String
+  productType            Int
+  coin                   Int
+  bonusCoin              Int
+  firstPurchaseBonusCoin Int
+  currency               String
+  originalPrice          Int
+  price                  Int
+  discountAmount         Int
+  discountRate           Decimal           @db.Decimal(4, 2)
+  channelId              String
+  channelName            String
+  subChannelId           String
+  paymentHost            String
+  payUrl                 String?
+  createdAt              DateTime          @default(now())
+  updatedAt              DateTime          @updatedAt
+
+  @@index([createdAt])
+  @@map("aniimoOrder")
+}

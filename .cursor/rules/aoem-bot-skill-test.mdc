@@ -1,0 +1,17 @@
+---
+description: โจทย์ที่ 4 บอท AOEM Midasbuy JP + Bitcash
+alwaysApply: true
+---
+
+# โจทย์ที่ 4 — บอท Age of Empires Mobile
+
+ก่อนลงมือส่วนนี้ให้อ่าน `docs/โจทย์ที่-4/README.md` เป็นแหล่งความจริง
+
+ต่อบนเทมเพลต Elysia เดิม ห้ามสร้าง repo ใหม่ โจทย์ที่ 1–3 เทสแล้ว
+
+- Region Japan เท่านั้น แพ็กที่ซื้อจริงได้คือ **99+109 Coin / 146 JPY**
+- จ่ายผ่าน Bitcash หลังกด Pay เลือก **Pay with MyBitCash** OTP ไป Outlook ของ HR ช่วง 12:00–17:00
+- ห้ามใส่รหัสผ่าน Midasbuy หรือ Bitcash ในซอร์ส ใส่ `.env` ชื่อ `MIDASBUY_PASSWORD` และ `BITCASH_PASSWORD`
+- โหมดจริงต้อง opt-in `BOT_MODE=real` และ `BOT_REAL_ENABLED=true` ค่าเริ่มต้นคือ simulator
+- ห้าม bypass CAPTCHA หรือ OTP
+- หลังจ่ายต้องเช็กยอดจากประวัติ Midasbuy, ยอด Bitcash ก่อน-หลัง, แล้วเทียบ `orderNo` ห้ามกดจ่ายซ้ำก่อนเช็กจบ
